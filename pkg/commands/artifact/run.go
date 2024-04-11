@@ -584,7 +584,7 @@ func initScannerConfig(opts flag.Options, cacheClient cache.Cache) (ScannerConfi
 
 		var downloadedPolicyPaths []string
 		var disableEmbedded bool
-		downloadedPolicyPaths, err := operation.InitBuiltinPolicies(context.Background(), opts.CacheDir, opts.Quiet, opts.SkipPolicyUpdate, opts.MisconfOptions.PolicyBundleRepository)
+		downloadedPolicyPaths, err := operation.InitBuiltinPolicies(context.Background(), opts.CacheDir, opts.Quiet, opts.SkipPolicyUpdate, opts.MisconfOptions.PolicyBundleRepository, opts.RegistryOpts())
 		if err != nil {
 			if !opts.SkipPolicyUpdate {
 				log.Logger.Errorf("Falling back to embedded policies: %s", err)
@@ -603,6 +603,8 @@ func initScannerConfig(opts flag.Options, cacheClient cache.Cache) (ScannerConfi
 			HelmValueFiles:           opts.HelmValueFiles,
 			HelmFileValues:           opts.HelmFileValues,
 			HelmStringValues:         opts.HelmStringValues,
+			HelmAPIVersions:          opts.HelmAPIVersions,
+			HelmKubeVersion:          opts.HelmKubeVersion,
 			TerraformTFVars:          opts.TerraformTFVars,
 			CloudFormationParamVars:  opts.CloudFormationParamVars,
 			K8sVersion:               opts.K8sVersion,
