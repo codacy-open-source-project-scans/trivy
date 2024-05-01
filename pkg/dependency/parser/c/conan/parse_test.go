@@ -22,12 +22,13 @@ func TestParse(t *testing.T) {
 	}{
 		{
 			name:      "happy path",
-			inputFile: "testdata/happy.lock",
+			inputFile: "testdata/happy_v1_case1.lock",
 			wantLibs: []types.Library{
 				{
-					ID:      "pkga/0.0.1",
-					Name:    "pkga",
-					Version: "0.0.1",
+					ID:           "pkga/0.0.1",
+					Name:         "pkga",
+					Version:      "0.0.1",
+					Relationship: types.RelationshipDirect,
 					Locations: []types.Location{
 						{
 							StartLine: 13,
@@ -36,10 +37,10 @@ func TestParse(t *testing.T) {
 					},
 				},
 				{
-					ID:       "pkgb/system",
-					Name:     "pkgb",
-					Version:  "system",
-					Indirect: true,
+					ID:           "pkgb/system",
+					Name:         "pkgb",
+					Version:      "system",
+					Relationship: types.RelationshipIndirect,
 					Locations: []types.Location{
 						{
 							StartLine: 23,
@@ -48,9 +49,10 @@ func TestParse(t *testing.T) {
 					},
 				},
 				{
-					ID:      "pkgc/0.1.1",
-					Name:    "pkgc",
-					Version: "0.1.1",
+					ID:           "pkgc/0.1.1",
+					Name:         "pkgc",
+					Version:      "0.1.1",
+					Relationship: types.RelationshipDirect,
 					Locations: []types.Location{
 						{
 							StartLine: 30,
@@ -70,12 +72,13 @@ func TestParse(t *testing.T) {
 		},
 		{
 			name:      "happy path. lock file with revisions support",
-			inputFile: "testdata/happy2.lock",
+			inputFile: "testdata/happy_v1_case2.lock",
 			wantLibs: []types.Library{
 				{
-					ID:      "openssl/3.0.3",
-					Name:    "openssl",
-					Version: "3.0.3",
+					ID:           "openssl/3.0.3",
+					Name:         "openssl",
+					Version:      "3.0.3",
+					Relationship: types.RelationshipDirect,
 					Locations: []types.Location{
 						{
 							StartLine: 12,
@@ -84,10 +87,10 @@ func TestParse(t *testing.T) {
 					},
 				},
 				{
-					ID:       "zlib/1.2.12",
-					Name:     "zlib",
-					Version:  "1.2.12",
-					Indirect: true,
+					ID:           "zlib/1.2.12",
+					Name:         "zlib",
+					Version:      "1.2.12",
+					Relationship: types.RelationshipIndirect,
 					Locations: []types.Location{
 						{
 							StartLine: 23,
@@ -106,12 +109,41 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
+			name:      "happy path conan v2",
+			inputFile: "testdata/happy_v2.lock",
+			wantLibs: []types.Library{
+				{
+					ID:      "matrix/1.3",
+					Name:    "matrix",
+					Version: "1.3",
+					Locations: []types.Location{
+						{
+							StartLine: 5,
+							EndLine:   5,
+						},
+					},
+				},
+				{
+					ID:      "sound32/1.0",
+					Name:    "sound32",
+					Version: "1.0",
+					Locations: []types.Location{
+						{
+							StartLine: 4,
+							EndLine:   4,
+						},
+					},
+				},
+			},
+			wantDeps: []types.Dependency{},
+		},
+		{
 			name:      "happy path. lock file without dependencies",
-			inputFile: "testdata/empty.lock",
+			inputFile: "testdata/empty_v1.lock",
 		},
 		{
 			name:      "sad path. wrong ref format",
-			inputFile: "testdata/sad.lock",
+			inputFile: "testdata/sad_v1.lock",
 		},
 	}
 
