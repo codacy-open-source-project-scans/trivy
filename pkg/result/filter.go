@@ -89,7 +89,7 @@ func filterByVEX(report types.Report, opt FilterOption) error {
 		return nil
 	}
 
-	bom, err := sbomio.NewEncoder(core.Options{}).Encode(report)
+	bom, err := sbomio.NewEncoder(core.Options{Parents: true}).Encode(report)
 	if err != nil {
 		return xerrors.Errorf("unable to encode the SBOM: %w", err)
 	}
@@ -303,6 +303,8 @@ func applyPolicy(ctx context.Context, result *types.Result, policyFile string) e
 			return err
 		}
 		if ignored {
+			result.ModifiedFindings = append(result.ModifiedFindings,
+				types.NewModifiedFinding(scrt, types.FindingStatusIgnored, "Filtered by Rego", policyFile))
 			continue
 		}
 		filteredSecrets = append(filteredSecrets, scrt)
@@ -317,6 +319,8 @@ func applyPolicy(ctx context.Context, result *types.Result, policyFile string) e
 			return err
 		}
 		if ignored {
+			result.ModifiedFindings = append(result.ModifiedFindings,
+				types.NewModifiedFinding(lic, types.FindingStatusIgnored, "Filtered by Rego", policyFile))
 			continue
 		}
 		filteredLicenses = append(filteredLicenses, lic)

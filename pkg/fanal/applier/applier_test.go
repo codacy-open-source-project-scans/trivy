@@ -1,10 +1,10 @@
 package applier_test
 
 import (
-	"github.com/package-url/packageurl-go"
 	"sort"
 	"testing"
 
+	"github.com/package-url/packageurl-go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -972,7 +972,7 @@ func TestApplier_ApplyLayers(t *testing.T) {
 
 			got, err := a.ApplyLayers(tt.args.imageID, tt.args.layerIDs)
 			if tt.wantErr != "" {
-				require.NotNil(t, err)
+				require.Error(t, err)
 				assert.Contains(t, err.Error(), tt.wantErr, tt.name)
 			} else {
 				require.NoError(t, err, tt.name)

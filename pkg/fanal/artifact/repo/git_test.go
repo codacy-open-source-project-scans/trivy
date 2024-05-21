@@ -4,7 +4,6 @@ package repo
 
 import (
 	"context"
-	"github.com/aquasecurity/trivy/pkg/fanal/walker"
 	"net/http/httptest"
 	"testing"
 
@@ -16,6 +15,7 @@ import (
 	_ "github.com/aquasecurity/trivy/pkg/fanal/analyzer/secret"
 	"github.com/aquasecurity/trivy/pkg/fanal/artifact"
 	"github.com/aquasecurity/trivy/pkg/fanal/cache"
+	"github.com/aquasecurity/trivy/pkg/fanal/walker"
 )
 
 func setupGitServer() (*httptest.Server, error) {
@@ -211,7 +211,7 @@ func TestArtifact_Inspect(t *testing.T) {
 			defer cleanup()
 
 			ref, err := art.Inspect(context.Background())
-			assert.NoError(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, tt.want, ref)
 		})
 	}
@@ -253,7 +253,7 @@ func Test_newURL(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := newURL(tt.args.rawurl)
 			if tt.wantErr != "" {
-				require.NotNil(t, err)
+				require.Error(t, err)
 				assert.Contains(t, err.Error(), tt.wantErr)
 				return
 			} else {
